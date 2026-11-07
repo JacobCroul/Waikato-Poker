@@ -1,0 +1,18 @@
+{
+  "base_url": "http://CHANGE-ME:8000",
+  "admin_phone": "",
+  "infinite_cards": true,
+  "https_only": false,
+  "event": {
+    "status": "open",
+    "start": "",
+    "end": ""
+  },
+  "checkpoints": [
+    "Checkpoint 1",
+    "Checkpoint 2",
+    "Checkpoint 3",
+    "Checkpoint 4",
+    "Checkpoint 5"
+  ]
+}

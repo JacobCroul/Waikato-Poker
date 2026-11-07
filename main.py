@@ -9,6 +9,7 @@ from fastapi import Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
+import admin
 import draw
 import store
 
@@ -45,6 +46,8 @@ app.add_middleware(
     same_site="lax",
     https_only=bool(load_config().get("https_only", False)),  # set true in config if served over HTTPS
 )
+
+app.include_router(admin.router)  # admin panel at /admin (see admin.py)
 
 # ---------------------------------------------------------------- helpers
 

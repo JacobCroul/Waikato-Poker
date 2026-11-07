@@ -1,0 +1,11 @@
+# Secrets and live event data: never commit these
+config.json
+data.json
+qr_pages/
+
+# Python
+__pycache__/
+*.pyc
+*.tmp
+.venv/
+venv/

@@ -88,12 +88,15 @@ data.json
 - Draw logic tested in a sandbox (repeat draw, disabled checkpoint, closed/not started/ended, finite deck gives 52 unique cards then deck_empty, 40 concurrent draws). The routes themselves not yet run on the real folder.
 - generate_qr.py: reads config, creates checkpoints (128 bit token + 5 char short_code) in data.json, builds printable A4 QR pages in qr_pages/. Needs `pip install segno`. Safe to re-run (keeps existing tokens), --pages rebuilds pages only, --force regenerates everything (invalidates printed QRs). Tested in a sandbox, not yet run on the real folder.
 
+- admin.py (router mounted in main.py at /admin): separate admin password (hash in config.json as admin_hash, set with `python set_admin.py`), session expires after 12h, 5 wrong passwords locks login for 60s. Phone friendly. Dashboard: event open/close switch (sets config event.status, hard lockout), manual roll form (boat ID + 5 char code, tolerant of case/spaces/dashes, calls draw.draw_card with method manual, shows the card and a "text back" line), checkpoints table (code, draw count, enable/disable), boats table (hand, phone, reset PIN shown once), recent draws plus /admin/draws full log (manual draws in bold). All admin routes redirect to /admin/login when not logged in.
+- Admin panel tested in a sandbox with a test harness (gating, roll incl. repeat/bad boat/bad code, closed event, disabled checkpoint, PIN reset, lockout, expiry, missing admin_hash). Not yet run on the real folder. To use: `python set_admin.py`, then restart main.py once (main.py now includes the admin router).
+
 ## Next steps
 1. Settle the open decisions above.
 2. Done: {} in data.json, starter config.json. Change base_url in config.json, then run generate_qr.py.
 3. Done: boat registration (add_boat.py) and login. Next: install deps, run the server, test login from a phone.
 3b. Done: draw wired up (see draw.py). Next: run the server and test a draw from a phone.
-4. Add basic admin view of all draws, plus the manual roll tool (boat ID + short code).
+4. Done: admin panel (admin.py). Next: set admin password, run it, try a manual roll end to end.
 5. Add hand ranking and leaderboard.
 6. Dry run on land, then field test signal at checkpoints.
 
@@ -105,4 +108,6 @@ data.json
 - Added fallback: 5 character code under each QR, boat texts it to the admin who rolls the card via the admin page.
 - Wrote generate_qr.py (tokens, short codes, printable QR pages), starter config.json, {} in data.json.
 - Wrote draw.py and the /s/{token} draw button + POST route. Reveal timing defaulted to immediate, event window optional.
+- Wrote admin.py (event switch, manual roll, checkpoint toggles, boats and PIN reset, draw log) and set_admin.py; hooked into main.py with include_router.
 - Wrote login system in main.py (persistent 7 day cookie session), store.py, add_boat.py, requirements.txt.
+- Project moved to GitHub (Waikato-Poker folder) after an SMB issue. Repaired: restored store.py (was missing), removed bogus `store` line from requirements.txt (that is a different PyPI package), added .gitignore (config.json, data.json, qr_pages/ hold secrets). config.json and data.json are not in the repo: recreate config.json (base_url, checkpoints, secret_key is auto added) and re-run generate_qr.py and add_boat.py on the new machine.
